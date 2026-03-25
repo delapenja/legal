@@ -1,0 +1,123 @@
+<!DOCTYPE html>
+<html lang="sq">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Puna Ime — Llogaritësi i Afatit të Njoftimit</title>
+  <meta name="description" content="Llogaritni afatin e njoftimit për zgjidhjen e kontratës së punës sipas Kodit të Punës të Shqipërisë. Calculate employment termination notice periods under the Albanian Labor Code.">
+  <meta name="keywords" content="kodi punes, afati njoftimit, zgjidhje kontrate, Albanian labor code, termination notice, puna ime">
+  <meta name="author" content="Puna Ime">
+
+  <!-- Open Graph -->
+  <meta property="og:title" content="Puna Ime — Llogaritësi i Afatit të Njoftimit">
+  <meta property="og:description" content="Llogaritni afatin e njoftimit për zgjidhjen e kontratës së punës sipas Kodit të Punës të Shqipërisë.">
+  <meta property="og:type" content="website">
+
+  <!-- Favicon (Albanian eagle silhouette using SVG data URI) -->
+  <link rel="icon" href="data:image/svg+xml,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 100 100'><text y='.9em' font-size='90'>⚖️</text></svg>">
+
+  <!-- Google Fonts -->
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+
+  <link rel="stylesheet" href="css/style.css">
+</head>
+<body>
+
+  <!-- Header -->
+  <header class="site-header">
+    <div class="header-inner">
+      <h1 class="site-title">
+        <span class="title-flag">🇦🇱</span>
+        <span data-i18n="siteTitle">Puna Ime</span>
+      </h1>
+      <p class="site-subtitle" data-i18n="siteSubtitle">Llogaritësi i Afatit të Njoftimit për Zgjidhjen e Kontratës së Punës</p>
+    </div>
+    <button type="button" class="lang-toggle" id="langToggle" title="Switch language">EN</button>
+  </header>
+
+  <!-- Disclaimer -->
+  <div class="disclaimer">
+    <div class="disclaimer-inner">
+      <p data-i18n="disclaimer">Ky mjet është vetëm për qëllime informative dhe nuk përbën këshillë ligjore. Referojuni gjithmonë Kodit të Punës të Republikës së Shqipërisë dhe konsultohuni me një profesionist ligjor.</p>
+    </div>
+  </div>
+
+  <!-- Main Content -->
+  <main>
+    <!-- Input Form -->
+    <div class="form-card">
+      <h2 data-i18n="formTitle">Të dhënat e punësimit</h2>
+      <form id="calcForm" novalidate>
+        <div class="form-group">
+          <label for="startDate" data-i18n="startDateLabel">Data e fillimit të punës</label>
+          <input type="date" id="startDate" required>
+        </div>
+
+        <div class="form-group">
+          <label for="referenceDate" data-i18n="referenceDateLabel">Data e ftesës me shkrim për takim</label>
+          <span class="form-hint" data-i18n="referenceDateHint">(data kur punëdhënësi i dërgon punëmarrësit ftesën me shkrim — parazgjedhur sot)</span>
+          <input type="date" id="referenceDate">
+        </div>
+
+        <div class="form-group">
+          <label for="meetingDate" data-i18n="meetingDateLabel">Data dhe ora e takimit (opsionale)</label>
+          <span class="form-hint" data-i18n="meetingDateHint">(data dhe ora e takimit të caktuar nga ftesa)</span>
+          <input type="datetime-local" id="meetingDate">
+        </div>
+
+        <div class="form-group">
+          <label for="writtenNoticeDate" data-i18n="writtenNoticeDateLabel">Data e njoftimit me shkrim (opsionale)</label>
+          <span class="form-hint" data-i18n="writtenNoticeDateHint">(data kur punëdhënësi lëshon njoftimin me shkrim pas takimit)</span>
+          <input type="date" id="writtenNoticeDate">
+        </div>
+
+        <div class="form-group">
+          <label for="salary" data-i18n="salaryLabel">Paga mujore bruto (opsionale)</label>
+          <span class="form-hint" data-i18n="salaryHint">(për llogaritjen e shpërblimit të vjetërsisë)</span>
+          <input type="number" id="salary" min="0" step="1" data-i18n-placeholder="salaryPlaceholder" placeholder="p.sh. 50000">
+        </div>
+
+        <div class="form-actions">
+          <button type="submit" class="btn btn-primary" data-i18n="calculateBtn">Llogarit</button>
+          <button type="button" class="btn btn-secondary" id="resetBtn" data-i18n="resetBtn">Pastro</button>
+        </div>
+      </form>
+    </div>
+
+    <!-- Error Container -->
+    <div id="errorContainer" class="error-container hidden"></div>
+
+    <!-- Print-only Report Header (hidden on screen) -->
+    <div id="printHeader" class="print-header">
+      <div class="print-header-top">
+        <div class="print-logo">
+          <span class="print-logo-icon">⚖️</span>
+          <div>
+            <h1 class="print-logo-title" data-i18n="siteTitle">Puna Ime</h1>
+            <p class="print-logo-subtitle" data-i18n="siteSubtitle">Llogaritësi i Afatit të Njoftimit për Zgjidhjen e Kontratës së Punës</p>
+          </div>
+        </div>
+        <div class="print-meta">
+          <p class="print-meta-label" data-i18n="printReportTitle">Raport i Llogaritjes</p>
+          <p class="print-meta-date" id="printDate"></p>
+        </div>
+      </div>
+      <div class="print-header-rule"></div>
+      <p class="print-disclaimer" data-i18n="printDisclaimer">Ky dokument është vetëm për qëllime informative dhe nuk përbën këshillë ligjore.</p>
+    </div>
+
+    <!-- Results -->
+    <div id="results" class="results-section hidden"></div>
+  </main>
+
+  <!-- Footer -->
+  <footer class="site-footer">
+    <p data-i18n="footerText">Bazuar në Kodin e Punës të Republikës së Shqipërisë (Ligj nr. 7961/1995, i ndryshuar)</p>
+    <p data-i18n="footerArticles">Nenet 140–158</p>
+  </footer>
+
+  <script src="js/i18n.js"></script>
+  <script src="js/app.js"></script>
+</body>
+</html>
